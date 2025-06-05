@@ -4,7 +4,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-exports.chat = async (req, res) => {
+const chat = async (req, res) => {
   try {
     const userMessage = req.body.message;
 
@@ -15,7 +15,9 @@ exports.chat = async (req, res) => {
 
     res.json({ reply: completion.choices[0].message.content });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to call openAI api" });
+    console.error("Cannot calling OpenAI:", error);
+    res.status(500).json({ error: "Open AI calling error" });
   }
 };
+
+module.exports = { chat };
