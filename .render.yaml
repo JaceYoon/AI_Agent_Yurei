@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: yurei-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: node backend/server.js
+    envVars:
+      - key: OPENAI_API_KEY
+        value: your_openai_api_key_here
+    autoDeploy: true
