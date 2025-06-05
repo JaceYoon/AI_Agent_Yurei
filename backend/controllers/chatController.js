@@ -1,22 +1,21 @@
-const { Configuration, OpenAIApi } = require('openai');
-require('dotenv').config();
+const OpenAI = require("openai");
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
 });
-const openai = new OpenAIApi(configuration);
 
-async function chatWithOpenAI(req, res) {
+exports.chat = async (req, res) => {
   try {
-    const { message } = req.body;
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: message }],
-    });
-    res.json({ reply: completion.data.choices[0].message.content });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-}
+    const userMessage = req.body.message;
 
-module.exports = { chatWithOpenAI };
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [{ role: "user", content: userMessage }]
+    });
+
+    res.json({ reply: completion.choices[0].message.content });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to call openAI api" });
+  }
+};
